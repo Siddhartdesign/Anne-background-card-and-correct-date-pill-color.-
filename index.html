@@ -1,275 +1,247 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Anne’s diary</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Anne — Calendar Prototype</title>
 
-<!-- EB Garamond Header Font -->
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@700&display=swap" rel="stylesheet">
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#DBD1C7">
+
+<!-- EB Garamond for header -->
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --page-bg: #D2C6BB;
-  --header-bg: #DBD1C7;
-  --main-card-bg: #E3D7CB;
-  --entry-bg: #D5CABE;
+  :root{
+    --page-bg: #D2C6BB;
+    --header-bg: #DBD1C7;
+    --main-card-bg: #E3D7CB;
+    --entry-bg: #D5CABE;
+    --day-empty-bg: #DBD1C7;
+    --day-highlight: #DBACAA;
+    --dot: #B68312;
+    --month-pill: #E8DDD1;
+    --header-ink: #23190F;
+    --body-ink: #241A10;
+    --max-width: 1100px;
+  }
 
-  --day-empty-bg: #DBD1C7;
-  --day-highlight: #DBACAA;
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--page-bg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    color: var(--body-ink);
+  }
 
-  --dot: #B68312;
-  --month-pill: #E8DDD1;
+  .app {
+    max-width: var(--max-width);
+    margin: 24px auto;
+    padding: 0 18px 38px;
+  }
 
-  --header-ink: #23190F;
-  --body-ink: #241A10;
+  /* HEADER */
+  .header {
+    background: var(--header-bg);
+    padding: 18px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+  }
+  .photo {
+    width: 72px; height: 72px;
+    border-radius: 6px; overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+  .photo img { width:100%; height:100%; object-fit:cover; }
+  .title {
+    font-family: 'EB Garamond', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--header-ink);
+  }
 
-  --max-width: 1100px;
-}
+  /* MONTH PILL */
+  .controls-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .pill {
+    background: var(--month-pill);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 999px;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    color: var(--body-ink);
+    font-weight: 600;
+  }
+  .pill button {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--body-ink);
+  }
 
-/* GLOBAL */
-body {
-  margin: 0;
-  background: var(--page-bg);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial;
-  color: var(--body-ink);
-}
+  /* MAIN CARD */
+  .main-card {
+    background: var(--main-card-bg);
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+  }
 
-.app {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 20px;
-}
+  /* DESKTOP LAYOUT */
+  .layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
 
-/* HEADER BAR */
-.header-bar {
-  background: var(--header-bg);
-  padding: 18px 22px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
+  /* ENTRY PANEL */
+  .entry-panel {
+    width: 320px;
+    background: var(--entry-bg);
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    overflow: auto;
+    max-height: 70vh;
+  }
+  .entry-panel h2 {
+    font-family: 'EB Garamond', serif;
+    margin: 0 0 10px;
+    font-size: 22px;
+    color: var(--header-ink);
+  }
+  .entry-content {
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
 
-.header-bar img {
-  width: 70px;
-  height: 70px;
-  border-radius: 8px;
-  object-fit: cover;
-  filter: sepia(0.35) contrast(1.05);
-}
-
-.header-title {
-  font-family: 'EB Garamond', serif;
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: var(--header-ink);
-}
-
-/* MONTH SELECTOR */
-.month-selector {
-  background: var(--month-pill);
-  border-radius: 999px;
-  padding: 12px 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  font-weight: 600;
-  margin: 0 auto 20px auto;
-  color: var(--body-ink);
-}
-
-.month-selector button {
-  background: none;
-  border: none;
-  font-size: 1.4rem;
-  opacity: 0.6;
-  cursor: pointer;
-}
-
-/* MAIN CARD */
-.main-card {
-  background: var(--main-card-bg);
-  border-radius: 16px;
-  padding: 20px;
-}
-
-/* LAYOUT */
-.layout {
-  display: flex;
-  gap: 22px;
-}
-
-/* ENTRY PANEL */
-.entry-panel {
-  width: 300px;
-  background: var(--entry-bg);
-  padding: 16px;
-  border-radius: 12px;
-}
-
-.entry-panel h2 {
-  margin-top: 0;
-  font-family: 'EB Garamond', serif;
-  font-size: 1.4rem;
-}
-
-.entry-content {
-  line-height: 1.45;
-  margin-top: 10px;
-}
-
-/* CALENDAR */
-.calendar {
-  flex: 1;
-}
-
-.weekday-row {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 10px;
-  opacity: 0.75;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 12px;
-}
-
-.day {
-  background: var(--day-empty-bg);
-  padding: 18px;
-  min-height: 82px;
-  border-radius: 12px;
-  text-align: center;
-  font-size: 1.15rem;
-  position: relative;
-  border: 1px solid rgba(0,0,0,0.05);
-}
-
-.day.has-entry {
-  background: var(--day-highlight);
-}
-
-.milestone-dot {
-  width: 10px;
-  height: 10px;
-  background: var(--dot);
-  border-radius: 50%;
-  position: absolute;
-  top: 6px;
-  right: 6px;
-}
-
-/* -------------------------------------- */
-/* 📱 MOBILE RESPONSIVE  */
-/* -------------------------------------- */
-
-@media (max-width: 900px) {
-
-  .app { padding: 12px; }
-
-  .header-bar {
-    padding: 14px;
+  /* CALENDAR */
+  .calendar { flex: 1; }
+  .weekday-row {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.45);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
     gap: 12px;
   }
 
-  .header-bar img {
-    width: 56px;
-    height: 56px;
-  }
-
-  .header-title {
-    font-size: 1.85rem;
-  }
-
-  .month-selector {
-    width: 100%;
-    font-size: 1rem;
-    padding: 10px 14px;
-  }
-
-  .layout {
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .entry-panel {
-    width: 100%;
-    padding: 12px;
-  }
-
-  .entry-panel h2 {
-    font-size: 1.2rem;
-    margin-bottom: 8px;
-  }
-
-  .entry-content {
-    font-size: 0.96rem;
-    line-height: 1.36;
-  }
-
-  .entry-content > div,
-  .entry-content p {
-    margin: 6px 0;
-  }
-
-  .weekday-row {
-    margin-bottom: 6px;
-    font-size: 0.82rem;
-  }
-
-  .grid {
-    gap: 10px;
-  }
-
   .day {
-    padding: 12px;
-    min-height: 60px;
-    font-size: 1rem;
+    background: var(--day-empty-bg);
+    border-radius: 8px;
+    padding: 14px;
+    min-height: 85px;
+    border: 1px solid rgba(0,0,0,0.08);
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .day:hover { transform: translateY(-2px); transition: 0.12s; }
+  .day-number { font-weight: 700; }
+
+  .has-entry { background: var(--day-highlight); }
+  .day.selected {
+    outline: 2px solid rgba(0,0,0,0.1);
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,0.08);
   }
 
   .milestone-dot {
-    width: 8px;
-    height: 8px;
-    top: 7px;
-    right: 7px;
+    width: 10px; height: 10px;
+    background: var(--dot);
+    border-radius: 50%;
+    position: absolute;
+    top: 10px; right: 10px;
   }
-}
+
+  .empty-cell { height: 85px; }
+
+  /* ----------------------------- */
+  /*          MOBILE MODE         */
+  /* ----------------------------- */
+  @media(max-width: 900px){
+    .header {
+      padding: 14px;
+      gap: 14px;
+    }
+    .photo { width: 60px; height: 60px; }
+    .title { font-size: 24px; }
+
+    .layout {
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .entry-panel {
+      width: 100%;
+      max-height: none;
+    }
+
+    .grid {
+      gap: 10px;
+    }
+
+    .day {
+      min-height: 64px;
+      padding: 10px;
+    }
+
+    .weekday-row {
+      font-size: 0.85rem;
+    }
+
+    .pill {
+      padding: 8px 14px;
+      font-size: 0.9rem;
+    }
+  }
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
   <!-- HEADER -->
-  <div class="header-bar">
-    <img src="anne.jpg" alt="Anne Frank">
-    <div class="header-title">Anne’s diary</div>
+  <div class="header">
+    <div class="photo"><img src="anne.jpg" alt="Anne"></div>
+    <div class="title">Anne’s diary</div>
   </div>
 
-  <!-- MONTH SELECTOR -->
-  <div class="month-selector">
-    <button id="prevMonth">‹</button>
-    <span id="monthLabel">June 1942</span>
-    <button id="nextMonth">›</button>
+  <!-- MONTH SWITCHER -->
+  <div class="controls-bar">
+    <div class="pill">
+      <button id="prevMonth">◀</button>
+      <div id="monthLabel" style="min-width:140px;text-align:center"></div>
+      <button id="nextMonth">▶</button>
+    </div>
   </div>
 
   <!-- MAIN CARD -->
   <div class="main-card">
-
     <div class="layout">
 
-      <!-- LEFT PANEL -->
+      <!-- ENTRY PANEL -->
       <aside class="entry-panel">
         <h2>Entries</h2>
-        <div id="entryContent">Select a day</div>
+        <div id="entryContent" class="entry-content">Loading…</div>
       </aside>
 
       <!-- CALENDAR -->
@@ -278,112 +250,158 @@ body {
           <div>Sun</div><div>Mon</div><div>Tue</div>
           <div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
         </div>
-
         <div id="calendarGrid" class="grid"></div>
       </main>
 
     </div>
-
   </div>
+
 </div>
 
 <script>
-// LOAD JSON
-let ALL_ENTRIES = [];
+const JSON_FILE = "Anne_Frank_Diary.json";
+const MONTHS = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December"
+];
 
-fetch("Anne_Frank_Diary.json")
-  .then(r => r.json())
-  .then(j => {
-    const raw = j.chronological_data;
-    for (const yr in raw) {
-      for (const mo in raw[yr]) {
-        raw[yr][mo].forEach(e => {
-          const [d,m,y] = e.date.split("/");
-          let jsDate = new Date(+y, m-1, +d);
-          ALL_ENTRIES.push({
-            ...e,
-            jsDate,
-            y: +y,
-            m: m-1,
-            d: +d
-          });
-        });
-      }
-    }
+let entriesMap = {};
+let currentYear = 1942;
+let currentMonth = 5;
+let selectedDay = null;
+
+function pad(n){return String(n).padStart(2,'0');}
+function iso(y,m,d){return `${y}-${pad(m+1)}-${pad(d)}`;}
+
+function parseDDMMYYYY(s){
+  const p = s.split("/").map(Number);
+  return {y:p[2], m:p[1]-1, d:p[0], o:new Date(p[2],p[1]-1,p[0])};
+}
+
+fetch(JSON_FILE)
+  .then(r=>r.json())
+  .then(json=>{
+    buildEntries(json.chronological_data);
+    const first = findEarliest();
+    if(first){ currentYear = first.year; currentMonth = first.month; }
     renderCalendar();
+    autoSelectFirst();
   });
 
-// STATE
-let currentYear = 1942;
-let currentMonth = 5; // June
-const monthLabel = document.getElementById("monthLabel");
-const entryPanel = document.getElementById("entryContent");
-const calendarGrid = document.getElementById("calendarGrid");
-
-// RENDER CALENDAR
-function renderCalendar() {
-  const date = new Date(currentYear, currentMonth, 1);
-  const monthName = date.toLocaleString("default", {month:"long"});
-  monthLabel.textContent = `${monthName} ${currentYear}`;
-
-  calendarGrid.innerHTML = "";
-
-  const firstDay = date.getDay();
-  const days = new Date(currentYear, currentMonth+1, 0).getDate();
-
-  for (let i=0; i<firstDay; i++) {
-    calendarGrid.appendChild(document.createElement("div"));
-  }
-
-  for (let day=1; day<=days; day++) {
-    const tile = document.createElement("div");
-    tile.className = "day";
-    tile.textContent = day;
-
-    const thisDate = new Date(currentYear, currentMonth, day);
-    const entry = ALL_ENTRIES.find(x => x.jsDate.toDateString() === thisDate.toDateString());
-
-    if (entry) {
-      tile.classList.add("has-entry");
-      if (entry.milestone && entry.milestone.toLowerCase().includes("yes")) {
-        const dot = document.createElement("div");
-        dot.className = "milestone-dot";
-        tile.appendChild(dot);
-      }
-      tile.onclick = () => showEntry(entry);
-    } else {
-      tile.onclick = () => entryPanel.innerHTML = "<em>No entry for this day.</em>";
+function buildEntries(data){
+  entriesMap = {};
+  for(const y in data){
+    for(const m in data[y]){
+      data[y][m].forEach(e=>{
+        const p = parseDDMMYYYY(e.date);
+        const key = iso(p.y,p.m,p.d);
+        if(!entriesMap[key]) entriesMap[key]=[];
+        entriesMap[key].push({...e, _y:p.y, _m:p.m, _d:p.d});
+      });
     }
-
-    calendarGrid.appendChild(tile);
   }
 }
 
-// SHOW ENTRY
-function showEntry(e) {
-  entryPanel.innerHTML = `
-    <div style="font-size:1.05rem;font-weight:600;margin:8px 0;">
-      ${e.day_of_week} — ${e.date}
-    </div>
+function findEarliest(){
+  const keys = Object.keys(entriesMap);
+  if(!keys.length) return null;
+  let earliest = new Date(keys[0]);
+  keys.forEach(k=>{ const d=new Date(k); if(d<earliest) earliest=d; });
+  return {year:earliest.getFullYear(), month:earliest.getMonth()};
+}
 
-    <div style="margin:6px 0;"><strong>Theme:</strong> ${e.theme}</div>
-    <div style="margin:6px 0;"><strong>Milestone:</strong> ${e.milestone}</div>
-    <div style="margin-top:10px;">${e.text}</div>
+function renderCalendar(){
+  document.getElementById("monthLabel").textContent = `${MONTHS[currentMonth]} ${currentYear}`;
+
+  const grid = document.getElementById("calendarGrid");
+  grid.innerHTML="";
+
+  const firstDay = new Date(currentYear,currentMonth,1).getDay();
+  const days = new Date(currentYear,currentMonth+1,0).getDate();
+
+  for(let i=0;i<firstDay;i++){
+    const c=document.createElement("div");
+    c.className="empty-cell";
+    grid.appendChild(c);
+  }
+
+  for(let d=1; d<=days; d++){
+    const tile=document.createElement("div");
+    tile.className = "day";
+    tile.innerHTML = `<div class="day-number">${d}</div>`;
+    const key=iso(currentYear,currentMonth,d);
+    const arr=entriesMap[key]||[];
+
+    if(arr.length){
+      tile.classList.add("has-entry");
+      if(arr.some(e=>String(e.milestone).toUpperCase().includes("YES"))){
+        const dot=document.createElement("div");
+        dot.className="milestone-dot";
+        tile.appendChild(dot);
+      }
+      tile.onclick=()=>{selectedDay=d; showEntry(d); renderCalendar();}
+    } else {
+      tile.onclick=()=>{selectedDay=d; clearEntry(); renderCalendar();}
+    }
+
+    if(selectedDay===d) tile.classList.add("selected");
+
+    grid.appendChild(tile);
+  }
+}
+
+function showEntry(d){
+  const key=iso(currentYear,currentMonth,d);
+  const arr=entriesMap[key]||[];
+  const e=arr[0];
+
+  document.getElementById("entryContent").innerHTML = `
+    <div style="font-weight:700;margin-bottom:10px;color:var(--header-ink)">
+      ${e.day_of_week} — ${pad(d)}/${pad(currentMonth+1)}/${currentYear}
+    </div>
+    <div><strong>Theme:</strong> ${e.theme}</div>
+    <div style="margin:8px 0"><strong>Milestone:</strong> ${e.milestone}</div>
+    <div>${e.text}</div>
   `;
 }
 
-// MONTH BUTTONS
-prevMonth.onclick = () => {
-  currentMonth--;
-  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+function clearEntry(){
+  document.getElementById("entryContent").innerHTML="No entry for this day.";
+}
+
+function autoSelectFirst(){
+  const keys=Object.keys(entriesMap).filter(k=>{
+    const [y,m]=k.split("-").map(Number);
+    return y===currentYear && m-1===currentMonth;
+  }).sort();
+
+  if(keys.length){
+    const [y,m,d]=keys[0].split("-").map(Number);
+    selectedDay=d;
+    showEntry(d);
+  }
+}
+
+document.getElementById("prevMonth").onclick=()=>{
+  currentMonth--; if(currentMonth<0){currentMonth=11; currentYear--;}
+  autoSelectFirst();
   renderCalendar();
 };
 
-nextMonth.onclick = () => {
-  currentMonth++;
-  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+document.getElementById("nextMonth").onclick=()=>{
+  currentMonth++; if(currentMonth>11){currentMonth=0; currentYear++;}
+  autoSelectFirst();
   renderCalendar();
 };
+</script>
+
+<!-- SERVICE WORKER REGISTRATION -->
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("Service Worker registered"))
+    .catch(err => console.error("SW registration failed:", err));
+}
 </script>
 
 </body>
