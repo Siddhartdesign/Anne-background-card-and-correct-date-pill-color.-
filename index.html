@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Anne — Calendar Prototype</title>
 
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#DBD1C7">
+
 <!-- EB Garamond for header -->
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
 
@@ -173,55 +177,52 @@
   /* ----------------------------- */
   /*          MOBILE MODE         */
   /* ----------------------------- */
-/* ----------------------------- */
-/*          MOBILE MODE          */
-/* ----------------------------- */
-@media(max-width: 900px){
-  .header {
-    padding: 14px;
-    gap: 14px;
-  }
-  .photo { width: 60px; height: 60px; }
-  .title { font-size: 24px; }
+  @media(max-width: 900px){
+    .header {
+      padding: 14px;
+      gap: 14px;
+    }
+    .photo { width: 60px; height: 60px; }
+    .title { font-size: 24px; }
 
-  .layout {
-    flex-direction: column;
-    gap: 18px;
-  }
+    .layout {
+      flex-direction: column;
+      gap: 18px;
+    }
 
-  .entry-panel {
-    width: 100%;
-    max-height: none;
-  }
+    .entry-panel {
+      width: 100%;
+      max-height: none;
+    }
 
-  .grid {
-    gap: 10px;
-  }
+    .grid {
+      gap: 10px;
+    }
 
-  .day {
-    min-height: 64px;
-    padding: 10px;
-  }
+    .day {
+      min-height: 64px;
+      padding: 10px;
+    }
 
-  .weekday-row {
-    font-size: 0.85rem;
-  }
+    .weekday-row {
+      font-size: 0.85rem;
+    }
 
-  .pill {
-    padding: 8px 14px;
-    font-size: 0.9rem;
+    .pill {
+      padding: 8px 14px;
+      font-size: 0.9rem;
+    }
   }
-}
-
 </style>
 </head>
+
 <body>
 <div class="app">
 
   <!-- HEADER -->
   <div class="header">
     <div class="photo"><img src="anne.jpg" alt="Anne"></div>
-    <div class="title">Anne’s dairy </div>
+    <div class="title">Anne’s diary</div>
   </div>
 
   <!-- MONTH SWITCHER -->
@@ -393,5 +394,15 @@ document.getElementById("nextMonth").onclick=()=>{
   renderCalendar();
 };
 </script>
+
+<!-- SERVICE WORKER REGISTRATION -->
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("Service Worker registered"))
+    .catch(err => console.error("SW registration failed:", err));
+}
+</script>
+
 </body>
 </html>
